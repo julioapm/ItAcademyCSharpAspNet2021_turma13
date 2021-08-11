@@ -34,12 +34,14 @@ namespace Laboratorio7
                 Console.WriteLine(pessoa.Nome + " " + pessoa.Idade);
             }
             //pessoas.Sort();
-            pessoas.Sort(new PessoaComparadorIdade());
+            //pessoas.Sort(new PessoaComparadorIdade());
+            pessoas.Sort((p1,p2) => p1.Nome.CompareTo(p2.Nome));
             Console.WriteLine("Pessoas ordenadas:");
             foreach (Pessoa pessoa in pessoas)
             {
                 Console.WriteLine(pessoa.Nome + " " + pessoa.Idade);
             }
+            Console.WriteLine(pessoas.Exists(p => p.Nome == "Julio"));
         }
     }
 }
