@@ -36,6 +36,19 @@ namespace Laboratorio10
 
             var linq4 = pessoas.Where(p => p.Casada).Count();
             Console.WriteLine(linq4);
+            /*
+            var linq5 = from p in pessoas
+                        group p by p.Casada;
+                        */
+            var linq5 = pessoas.GroupBy(p => p.Casada);
+            foreach (var g in linq5)
+            {
+                Console.WriteLine(g.Key);
+                foreach (var p in g)
+                {
+                    Console.WriteLine(p);
+                }
+            }
         }
     }
 }
