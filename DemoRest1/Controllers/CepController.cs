@@ -24,7 +24,7 @@ namespace DemoRest1.Controllers
         }
 
         //GET /cep/90210010
-        [HttpGet("{cep}")]
+        [HttpGet("{cep:regex(^\\d{{8}}$)}")]
         public ActionResult<ConsultaCep> ConsultaCep(string cep)
         {
             _logger.LogInformation($"ConsultaCep: {cep}");
@@ -46,5 +46,11 @@ namespace DemoRest1.Controllers
                 .ThenBy(c => c.Cidade);
         }
 
+        //GET /cep/deuruim
+        [HttpGet("deuruim")]
+        public void Deuruim()
+        {
+            _cepService.FazAlgoRuim();
+        }
     }
 }

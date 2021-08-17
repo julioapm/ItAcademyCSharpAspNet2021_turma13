@@ -37,5 +37,10 @@ namespace DemoRest1.Services
                 Cep = "01001000"
             });
         }
+
+        public void FazAlgoRuim()
+        {
+            throw new System.Exception("Algo ruim aconteceu");
+        }
     }
 }
