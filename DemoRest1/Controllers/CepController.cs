@@ -41,7 +41,9 @@ namespace DemoRest1.Controllers
         public IEnumerable<ConsultaCep> ConsultaCeps()
         {
             _logger.LogInformation("ConsultaCeps");
-            return _cepService.ConsultaTodos();
+            return _cepService.ConsultaTodos()
+                .OrderBy(c => c.Estado)
+                .ThenBy(c => c.Cidade);
         }
 
     }
