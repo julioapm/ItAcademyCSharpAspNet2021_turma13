@@ -8,5 +8,6 @@ namespace DemoRest1.Services
         IEnumerable<ConsultaCep> ConsultaTodos();
         ConsultaCep ConsultaPorCep(string cep);
         void FazAlgoRuim();
+        void Cadastrar(ConsultaCep cep);
     }
 }

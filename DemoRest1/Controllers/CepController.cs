@@ -52,5 +52,23 @@ namespace DemoRest1.Controllers
         {
             _cepService.FazAlgoRuim();
         }
+
+        //POST /cep
+        [HttpPost]
+        public ActionResult<ConsultaCep> CadastrarCep(ConsultaCep novoCep)
+        {
+            _logger.LogInformation($"CadastrarCep: {novoCep}");
+            var existente = _cepService.ConsultaPorCep(novoCep.Cep);
+            if (existente != null)
+            {
+                return BadRequest("CEP já cadastrado");
+            }
+            _cepService.Cadastrar(novoCep);
+            return CreatedAtAction(
+                nameof(ConsultaCep),
+                new { cep = novoCep.Cep },
+                novoCep
+            );
+        }
     }
 }
