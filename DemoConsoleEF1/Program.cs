@@ -9,6 +9,7 @@ namespace DemoConsoleEF1
         {
             using (var db = new BloggingContext())
             {
+                Console.WriteLine($"Database path: {db.DbPath}.");
                 /*
                 db.Add(new Blog { Url = "http://blogs.msdn.com/adonet" });
                 db.Add(new Blog { Url = "http://blogs.msdn.com" });
