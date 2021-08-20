@@ -7,5 +7,7 @@ namespace DemoWsEF1.Models
     {
         public int PedidoId { get; set; }
         public DateTime DataEmissao { get; set; }
+        public Cliente Cliente { get; set; }
+        public int ClienteId { get; set; } 
     }
 }
