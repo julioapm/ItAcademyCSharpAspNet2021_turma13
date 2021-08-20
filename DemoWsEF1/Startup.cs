@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using DemoWsEF1.Models;
 
 namespace DemoWsEF1
 {
@@ -26,7 +28,13 @@ namespace DemoWsEF1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<BdContext>(options =>
+                {
+                    var stringConexao = Configuration.GetConnectionString("ConexaoPadrao");
+                    options.UseSqlServer(stringConexao);
+                    options.LogTo(Console.WriteLine).EnableSensitiveDataLogging();
+                }
+            );
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
