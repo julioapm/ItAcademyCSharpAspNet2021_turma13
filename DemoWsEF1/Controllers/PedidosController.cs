@@ -26,7 +26,30 @@ namespace DemoWsEF1.Controllers
         [HttpPost]
         public async Task<ActionResult<PedidoDTO>> ProcessarCarrinho(CarrinhoDTO carrinho)
         {
-            
+            var pedido = new Pedido();
+            pedido.DataEmissao = DateTime.Now;
+            var cliente = await _basedados.Clientes.FindAsync(carrinho.IdCliente);
+            if (cliente == null)
+            {
+                return BadRequest("Cliente não encontrado");
+            }
+            pedido.Cliente = cliente;
+            if (carrinho.Itens.Count() == 0)
+            {
+                return BadRequest("Carrinho vazio");
+            }
+            foreach (var item in carrinho.Itens)
+            {
+                var produto = await _basedados.Produtos.FindAsync(item.CodigoProduto);
+                if (produto == null)
+                {
+                    return BadRequest($"Produto não encontrado {item.CodigoProduto}");
+                }
+
+            }
+
+            await _basedados.Pedidos.AddAsync(pedido);
+            await _basedados.SaveChangesAsync();            
         }
     }
 }
