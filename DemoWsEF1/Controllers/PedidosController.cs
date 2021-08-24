@@ -71,5 +71,29 @@ namespace DemoWsEF1.Controllers
             resposta.ValorTotal = total;
             return resposta;
         }
+
+        //GET /pedidos?cliente={id}
+        [HttpGet]
+        public async Task<ActionResult<List<PedidoDTO>>> ListarPedidos(int cliente)
+        {
+            _logger.LogInformation($"Listando pedidos do cliente {cliente}");
+            var clienteAtual = await _basedados.Clientes.FindAsync(cliente);
+            if (clienteAtual == null)
+            {
+                return BadRequest("Cliente inexistente.");
+            }
+
+            //eager load
+            var pedidos = await _basedados.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .Where(p => p.ClienteId == cliente)
+                .OrderBy(p => p.DataEmissao)
+                .ToListAsync();
+            
+            var resposta = pedidos.Select(p => PedidoDTO.FromPedido(p)).ToList();
+            return resposta;
+        }
     }
 }
