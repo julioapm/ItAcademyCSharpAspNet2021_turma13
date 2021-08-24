@@ -38,6 +38,8 @@ namespace DemoWsEF1.Controllers
             {
                 return BadRequest("Carrinho vazio");
             }
+            pedido.PedidoProdutos = new List<PedidoProduto>();
+            decimal total = 0;
             foreach (var item in carrinho.Itens)
             {
                 var produto = await _basedados.Produtos.FindAsync(item.CodigoProduto);
@@ -45,11 +47,29 @@ namespace DemoWsEF1.Controllers
                 {
                     return BadRequest($"Produto não encontrado {item.CodigoProduto}");
                 }
-
+                var itemDoPedido = new PedidoProduto();
+                itemDoPedido.Produto = produto;
+                itemDoPedido.Quantidade = item.Quantidade;
+                itemDoPedido.ValorUnitario = produto.Preco;
+                pedido.PedidoProdutos.Add(itemDoPedido);
+                total += produto.Preco * item.Quantidade;
             }
 
             await _basedados.Pedidos.AddAsync(pedido);
-            await _basedados.SaveChangesAsync();            
+            await _basedados.SaveChangesAsync();
+            
+            var resposta = new PedidoDTO();
+            resposta.Codigo = pedido.PedidoId;
+            resposta.DataEmissao = pedido.DataEmissao;
+            resposta.NomeCliente = pedido.Cliente.Nome;
+            resposta.EmailCliente = pedido.Cliente.Email;
+            resposta.Itens = pedido.PedidoProdutos.Select(pp => new PedidoItemDTO {
+                CodigoProduto = pp.Produto.ProdutoId,
+                NomeProduto = pp.Produto.Nome,
+                Quantidade = pp.Quantidade
+            }).ToList();
+            resposta.ValorTotal = total;
+            return resposta;
         }
     }
 }
